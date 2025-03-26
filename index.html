@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отклик на вакансию</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        * {
+            padding: 0;
+            margin: 0;
+            border: 0;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        :focus, :active {
+            outline: none;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:focus, a:active {
+            outline: none;
+        }
+        ul, li {
+            list-style: none;
+        }
+        nav, footer, header, aside {
+            display: block;
+        }
+        html, body, #root {
+            width: 100%;
+            height: 100%;
+            font-family: Inter, sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 3%;
+            overflow-x: hidden;
+        }
+        body {
+            background-color: #d6d9e2;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        header, main, footer {
+            padding: 24px 28px;
+        }
+        header {
+            position: relative;
+            width: inherit;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background-color: #eff4f8;
+            z-index: 1;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            background-color: #ffffff;
+        }
+        footer {
+            border-radius: 0 0 8px 8px;
+            color: #97a0af;
+            text-align: center;
+            background-color: #eff4f8;
+        }
+        footer a {
+            text-decoration: underline;
+            color: inherit;
+        }
+        .resume-wrapper {
+            width: 640px;
+            margin: 40px auto;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+        .section-header {
+            padding-bottom: 8px;
+            border-bottom: 1px solid #97a0af;   
+        }
+
+        @media (max-width: 640px) {
+            header, footer {
+                border-radius: 0;
+            }
+            .resume-wrapper {
+                width: auto;
+                margin: 0;
+            }
+        }
+        @media (max-width: 500px) {
+            body {
+                font-size: 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            h3 {
+                font-size: 14px;
+            }
+            header, main, footer {
+                padding: 16px 20px;
+            }
+        }
+        @media (max-width: 370px) {
+            h1 {
+                font-size: 18px;
+            }
+        }
+
+        /* Стили для блока 'Профиль' */
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            color: #97a0af;
+        }
+        .profile-content {
+            display: flex;
+            gap: 20px;
+        }
+        .profile-content__photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 30px;
+        }
+        .profile-content__default-photo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile-content__info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-weight: 500;
+        }
+        .profile-content__info p:last-child span {
+            font-weight: 700;
+        }
+        .profile-content__info-name {
+            color: #97a0af;
+        }
+        .profile-rating {
+            padding: 16px 20px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0px 10px 15px 0px #0337671A;
+            background-color: #ffffff;
+        }
+        .profile-rating__info {
+            display: flex;
+            gap: 8px;
+        }
+        .profile-rating__description {
+            align-self: end;
+        }
+        .profile-rating__description span {
+            font-weight: 700;
+        }
+        .profile-rating__sidebar {
+            position: relative;
+            height: 8px;
+            border-radius: 20px;
+            background-color: #d6d9e2;
+        }
+        .profile-rating__sidebar-current-position-value {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 90%;
+            height: 8px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #F89AFA 0%, #926BFF 100%);
+        }
+        .profile-rating__sidebar-separator--first {
+            position: absolute;
+            left: 25%;
+            height: 8px;
+            width: 4px;
+            background-color: #ffffff;
+        }
+        .profile-rating__sidebar-separator--second {
+            position: absolute;
+            left: 50%;
+            height: 8px;
+            width: 4px;
+            background-color: #ffffff;
+        }
+        .profile-rating__sidebar-separator--third {
+            position: absolute;
+            left: 75%;
+            height: 8px;
+            width: 4px;
+            background-color: #ffffff;
+        }
+        .profile-rating__sidebar-current-position-mark {
+            position: absolute;
+            left: 90%;
+            height: 22px;
+            width: 24px;
+            border: 4px solid #ffffff;
+            border-radius: 50%;
+            transform: translate(-99%, -6px);
+            background-color: #926bff;
+        }
+        .profile-rating__sidebar-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .profile-rating__sidebar-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .profile-rating__sidebar-step {
+            color: #97a0af;
+        }
+        .profile-rating__sidebar-step--active {
+            font-weight: 700;
+            color: #000000;
+        }
+
+        @media (max-width: 550px) {
+            .profile-rating__sidebar-step {
+                width: min-content;
+                font-size: 10px;
+                white-space: nowrap;
+                justify-self: center;
+            }
+        }
+        @media (max-width: 500px) {
+            .profile-content__photo {
+                width: 70px;
+                height: 70px;
+            }
+            .profile-rating {
+                padding: 10px 14px;
+            }
+        }
+        @media (max-width: 450px) {
+            .profile-rating__sidebar-step {
+                display: none;
+            }
+        }
+
+        /* Стили для блока 'Контакты' */
+        .contacts__content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 12px;
+        }
+        .contacts__content-name {
+            color: #97a0af;
+        }
+        .contacts__content-value {
+            font-weight: 700;
+        }
+
+        /* Стили для блока 'Отклик на вакансию' */
+        .response__content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .response__content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .response__content-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 12px;
+        }
+        .response__content-name {
+            color: #97a0af;
+        }
+        .response__content-value {
+            font-weight: 700;
+        }
+
+        @media (max-width: 400px) {
+            .response__content-value {
+                text-align: end;
+            }
+        }
+
+        /* Стили для блока 'Навыки' */
+        .skills__content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .skills__item {
+            padding: 8px 16px;
+            border-radius: 30px;
+            background-color: #d6d9e2;
+        }
+
+        /* Стили для блока 'Образование' */
+        .education__content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 12px;
+        }
+        .education__content-name {
+            color: #97a0af;
+        }
+        .education__content-value {
+            font-weight: 700;
+        }
+
+        @media (max-width: 400px) {
+            .education__content-value {
+                text-align: end;
+            }
+        }
+
+        /* Стили для блока 'Дополнительное образование' */
+        .additional-education__content {
+            white-space: pre-wrap;
+        }
+
+        /* Стили для блока 'Опыт работы' */
+        .experience__content {
+            white-space: pre-wrap;
+        }
+
+        /* Стили для блока 'Интересы' */
+        .interest__content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .interest__item {
+            padding: 8px 16px;
+            border-radius: 30px;
+            background-color: #d6d9e2;
+        }
+
+        /* Стили для блока 'Активности' */
+        .activity__content-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .activity__category-card {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #d6d9e2;
+            border-radius: 6px;
+        }
+        .activity__category-count {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 500px) {
+            .activity__content-wrapper {
+                padding-bottom: 10px;
+                display: flex;
+                overflow-x: auto;
+            }
+            .activity__category-card {
+                min-width: 130px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='resume-wrapper'>
+        <header>
+            <h3 class='profile-header'>
+                Отклик на вакансию
+                <span class='profile-header__status'>
+                    Резюме
+                </span>
+            </h3>
+            <div class='profile-content'>
+                <div class='profile-content__info'>
+                    <h1>
+                        Григорьева
+                        <br/>
+                        Ирина  Сергеевна
+                    </h1>
+                    <p>
+                        <span></span>
+                            женский, 
+                            студент
+                    </p>
+                    <p>
+                        Желаемая зарплата:
+                        <span>
+                                80,000 ₽
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class='profile-rating'>
+                <div class='profile-rating__info'>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5002 33.3336L27.5002 33.3336M11.0002 6.66678L29.0002 6.66678L29.0002 17.5442C29.0002 22.7547 24.9502 27.0179 20.0002 27.0179C15.0502 27.0179 11.0002 22.7547 11.0002 17.5442L11.0002 6.66678Z" stroke="#F0BE0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20.0002 27.0178L20.0002 33.3336" stroke="#F0BE0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11.0001 9.73663L11.0001 19.2103L9.50011 19.2103C6.95011 19.2103 5.00011 17.1577 5.00011 14.4735C5.00011 11.7893 6.95011 9.73663 9.50011 9.73663L11.0001 9.73663ZM29.0001 19.2103L29.0001 9.73663L30.5001 9.73663C33.0501 9.73663 35.0001 11.7893 35.0001 14.4735C35.0001 17.1577 33.0501 19.2103 30.5001 19.2103L29.0001 19.2103Z" stroke="#F0BE0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p class='profile-rating__description'>
+                        <span>
+                            7-е место из 28
+                        </span>
+                        <br/>
+                        по количеству заработанных баллов в «Цифровом Кампусе».
+                    </p>
+                </div>
+                <div class='profile-rating__sidebar-wrapper'>
+                    <div class='profile-rating__sidebar'>
+                        <div class='profile-rating__sidebar-current-position-value'></div>
+                        <div class='profile-rating__sidebar-separator--first'></div>
+                        <div class='profile-rating__sidebar-separator--second'></div>
+                        <div class='profile-rating__sidebar-separator--third'></div>
+                        <div class='profile-rating__sidebar-current-position-mark'></div>
+                    </div>
+                    <div class='profile-rating__sidebar-steps'>
+                        <p class='profile-rating__sidebar-step'>
+                            неактивный
+                        </p>
+                        <p class='profile-rating__sidebar-step'>
+                            малоактивный
+                        </p>
+                        <p class='profile-rating__sidebar-step'>
+                            активный
+                        </p>
+                        <p class='profile-rating__sidebar-step'>
+                            очень активный
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <section id='contacts'>
+                <h3 class='section-header'>
+                    Контакты
+                </h3>
+                <div class='contacts__content'>
+                    <p class='contacts__content-name'>
+                        Телефон
+                    </p>
+                    <p class='contacts__content-value'>
+                            +79141767287
+                    </p>
+                    <p class='contacts__content-name'>
+                        Email
+                    </p>
+                    <p class='contacts__content-value'>
+                            
+                    </p>
+                </div>
+            </section>
+            <section id='response'>
+                <h3 class='section-header'>
+                    Желаемые условия работы
+                </h3>
+                <div class='response__content-wrapper'>
+                    <div class='response__content'>
+                        <div class='response__content-info'>
+                            <p class='response__content-name'>
+                                Уровень зарплаты
+                            </p>
+                            <p class='response__content-value'>
+                                    80,000 ₽
+                            </p>
+                            <p class='response__content-name'>
+                                График работы
+                            </p>
+                            <div>
+                                <p class='response__content-value'>
+                                        Гибкий график, Удалённая работа
+                                </p>
+                            </div>
+                            <p class='response__content-name'>
+                                Специализации
+                            </p>
+                            <div>
+                                    <p class='response__content-value'>
+                                        Аналитик
+                                    </p>
+                                    <p class='response__content-value'>
+                                        Бизнес-аналитик
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id='skills'>
+                <h3 class='section-header'>
+                    Навыки
+                </h3>
+                <ul class='skills__content-wrapper'>
+                    <li class='skills__item'>
+                        работа в команде
+                    </li>
+                    <li class='skills__item'>
+                        аналитическое мышление
+                    </li>
+                    <li class='skills__item'>
+                        эмоциональный интеллект
+                    </li>
+                    <li class='skills__item'>
+                        грамотная речь
+                    </li>
+                </ul>
+            </section>
+            <section id='education'>
+                <h3 class='section-header'>
+                    Образование
+                </h3>
+                <div class='education__content'>
+                    <p class='education__content-name'>
+                        Учебное заведение
+                    </p>
+                    <p class='education__content-value'>
+                            РЭУ имени Г.В. Плеханова
+                    </p>
+                    <p class='education__content-name'>
+                        Отдел
+                    </p>
+                    <p class='education__content-value'>
+                                Высшая школа креативных индустрий
+                    </p>
+                    <p class='education__content-name'>
+                        Уровень подготовки
+                    </p>
+                    <p class='education__content-value'>
+                            Специалитет
+                    </p>
+                    <p class='education__content-name'>
+                        Форма обучения
+                    </p>
+                    <p class='education__content-value'>
+                            Очная
+                    </p>
+                    <p class='education__content-name'>
+                        Курс
+                    </p>
+                    <p class='education__content-value'>
+                            3
+                    </p>
+                </div>
+            </section>
+            <section id='additional-education'>
+                <h3 class='section-header'>
+                    Дополнительное образование
+                </h3>
+                <p class='additional-education__content'>Институт дополнительного образования, специальность "Системный администратор", март 2024</p>
+            </section>
+            <section id='experience'>
+                <h3 class='section-header'>
+                    Опыт работы
+                </h3>
+                <p class='experience__content'>Документовед, кафедра "Информационные технологии", работа с документами, 2021 - 2024</p>
+            </section>
+            <section id='interest'>
+                <h3 class='section-header'>
+                    Интересы
+                </h3>
+                <ul class='interest__content-wrapper'>
+                    <li class='interest__item'>
+                        IT
+                    </li>
+                    <li class='interest__item'>
+                        Инновации
+                    </li>
+                    <li class='interest__item'>
+                        Активная жизнь
+                    </li>
+                    <li class='interest__item'>
+                        Карьера
+                    </li>
+                </ul>
+            </section>
+            <section id='activity'>
+                <h3 class='section-header'>
+                    Выполнено 4 активностей
+                </h3>
+                <ul class='activity__content-wrapper'>
+                    <li class='activity__category-card'>
+                        <p class='activity__category-count'>
+                            1
+                        </p>
+                        <p class='activity__category-name'>
+                            Волонтёрство
+                        </p>
+                    </li>
+                    <li class='activity__category-card'>
+                        <p class='activity__category-count'>
+                            1
+                        </p>
+                        <p class='activity__category-name'>
+                            Студенческий совет
+                        </p>
+                    </li>
+                    <li class='activity__category-card'>
+                        <p class='activity__category-count'>
+                            1
+                        </p>
+                        <p class='activity__category-name'>
+                            Университет
+                        </p>
+                    </li>
+                    <li class='activity__category-card'>
+                        <p class='activity__category-count'>
+                            1
+                        </p>
+                        <p class='activity__category-name'>
+                            Спорт
+                        </p>
+                    </li>
+                </ul>
+            </section>
+        </main>
+        <footer>
+           Резюме создано и верифицированно на платформе
+            <span>
+                <a href="https://dicamp.ru">
+                    "Цифровой кампус"
+                </a>
+            </span>
+        </footer>
+    </div>
+    <script>
+        const header = document.querySelector('header');
+        const main = document.querySelector('main');
+        const wrapper = document.querySelector('.resume-wrapper');
+        const headerOffsetTop = header.offsetTop;
+
+        const handleScroll = () => {
+            if (document.body.scrollTop >= headerOffsetTop) {
+                header.style.top = document.body.scrollTop + 'px';
+                main.style.paddingTop = '64px';
+                wrapper.style.marginTop = 0;
+            } else {
+                header.style.top = 0;
+                main.style.paddingTop = '24px';
+                wrapper.style.marginTop = '40px';
+            }
+        };
+
+        window.addEventListener('wheel', handleScroll);
+    </script>
+    <script>
+        const profileContent = document.querySelector('.profile-content');
+        const img = document.createElement('img');
+        img.classList.add('profile-content__photo');
+        profileContent.prepend(img);
+
+        img.alt = 'Аватар пользователя';
+
+        const defaultImgSrc = 'FEMALE' === 'MALE'
+            ? 'https://https://dev.thewhite.ru/api/cs-service/containers/5752d1e2-7485-4128-bf5a-a6d3ab51fd39'
+            : 'https://https://dev.thewhite.ru/api/cs-service/containers/04ca6ce7-1310-4c52-b655-a9fa8c253482';
+        const userImgSrc = 'https://rea.dev.thewhite.ru/api/cs-service/containers/843fdb14-27f7-478c-b482-c0ab9e1957d6';
+
+        if (userImgSrc) {
+            img.src = userImgSrc;
+        } else {
+            img.src = defaultImgSrc;
+        }
+    </script>
+    <script>
+        const birthdaySpan = document.querySelectorAll('.profile-content__info span')[0];
+        const birthday = '';
+
+        if (!birthday) {
+            birthdaySpan.textContent = '';
+        } else {
+            const months = [
+                'января',
+                'февраля',
+                'марта',
+                'апреля',
+                'мая',
+                'июня', 
+                'июля',
+                'августа',
+                'сентября',
+                'октября',
+                'ноября',
+                'декабря'
+            ];
+            const [day, month, year] = birthday.split('.').map(Number);
+            const currentDate = new Date();
+            const birthdayDate = new Date(year, month - 1, day);
+            const birthdayThisYearDate = new Date(currentDate.getFullYear(), month - 1, day);
+            
+            let age = currentDate.getFullYear() - birthdayDate.getFullYear();
+            if (currentDate < birthdayThisYearDate) age -= 1;
+
+            const getDeclension = (age) => {
+                const lastAgeDigit = age % 10;
+
+                switch (true) {
+                    case (lastAgeDigit === 1):
+                        return 'год';
+                    case ([2, 3, 4].includes(lastAgeDigit)):
+                        return 'года';
+                    default:
+                        return 'лет';
+                }
+            };
+
+            const formattedDate = day + ' ' + months[month - 1] + ' ' + year + ' ' + 'г. ' + '(' + age + ' ' + getDeclension(age) + '),';
+
+            birthdaySpan.textContent = formattedDate;
+        }
+    </script>
+    <script>
+        const currentPositionValue = document.querySelector('.profile-rating__sidebar-current-position-value');
+        const currentPositionMark = document.querySelector('.profile-rating__sidebar-current-position-mark');
+        const profilesidebarstep = document.querySelectorAll('.profile-rating__sidebar-step');
+
+        currentPositionValue.style.width = `75%`;
+        currentPositionMark.style.left = `75%`;
+
+        let stepIndex;
+        switch (true) {
+            case Number(`75`) <= 25:
+                stepIndex = 0;
+                break;
+            case Number(`75`) <= 50:
+                stepIndex = 1;
+                break;
+            case Number(`75`) <= 75:
+                stepIndex = 2;
+                break;
+            default:
+                stepIndex = 3;
+        }
+
+        profilesidebarstep[stepIndex].classList.add('profile-rating__sidebar-step--active');
+    </script>
+</body>
+</html>
